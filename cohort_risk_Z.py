@@ -208,7 +208,7 @@ for category in categories:
     data_category=data_risks_selected[data_risks_selected['Категория']==category]
     category_means=[]
     for patient in patients:
-        category_means.append(data_category[patient].mean())
+        category_means.append(data_category[patient].mean().round(3))
     data_final[category]=category_means
 
 
@@ -230,6 +230,7 @@ for category in categories:
 data_final['Среднее по подгруппам вес 1'] = df_weight_1[categories].mean(axis=1)
 data_final['Среднее по подгруппам вес 2'] = df_weight_2[categories].mean(axis=1)
 data_final['Среднее по подгруппам вес 3'] = df_weight_3[categories].mean(axis=1)    
+data_final[[ 'Среднее по подгруппам','Среднее по подгруппам вес 1' ,'Среднее по подгруппам вес 2', 'Среднее по подгруппам вес 3']] = data_final[['Среднее по подгруппам','Среднее по подгруппам вес 1' ,'Среднее по подгруппам вес 2', 'Среднее по подгруппам вес 3']].round(3)
 
 #st.write("Данные по категориям:", data_final)
 if data_final is not None:
