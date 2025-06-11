@@ -64,6 +64,23 @@ def calculate_new_ratio(data, number_numinator, number_denominator, name):
     return(data)
 
 def calculate_metabolite_ratios(data):
+    data=data[['Название образца', 'Группа пациента', '5-hydroxytryptophan', 'ADMA',
+       'Adenosin', 'Alanine', 'Antranillic acid', 'Arginine', 'Asparagine',
+       'Aspartic acid', 'Betaine', 'Carnosine', 'Choline', 'Citrulline',
+       'Cortisol', 'Creatinine', 'Cytidine', 'DMG', 'Glutamic acid',
+       'Glutamine', 'Glycine', 'HIAA', 'Histamine', 'Histidine',
+       'Homoarginine', 'Hydroxyproline', 'Indole-3-acetic acid',
+       'Indole-3-butyric', 'Indole-3-carboxaldehyde', 'Indole-3-lactic acid',
+       'Indole-3-propionic acid', 'Kynurenic acid', 'Kynurenine', 'Lysine',
+       'Melatonin', 'Methionine', 'Methionine-Sulfoxide', 'Methylhistidine',
+       'NMMA', 'Ornitine', 'Pantothenic', 'Phenylalanine', 'Proline',
+       'Quinolinic acid', 'Riboflavin', 'Serine', 'Serotonin', 'Summ Leu-Ile',
+       'TMAO', 'Taurine', 'Threonine', 'TotalDMA (SDMA)', 'Tryptamine',
+       'Tryptophan', 'Tyrosin', 'Uridine', 'Valine', 'Xanthurenic acid', 'C0',
+       'C10', 'C10-1', 'C10-2', 'C12', 'C12-1', 'C14', 'C14-1', 'C14-2',
+       'C14-OH', 'C16', 'C16-1', 'C16-1-OH', 'C16-OH', 'C18', 'C18-1',
+       'C18-1-OH', 'C18-2', 'C18-OH', 'C2', 'C3', 'C4', 'C5', 'C5-1', 'C5-DC',
+       'C5-OH', 'C6', 'C6-DC', 'C8', 'C8-1']]    
     data["Arg/ADMA"]=data['Arginine']/data['ADMA']
     data['(Arg+HomoArg)/ADMA']=(data['Arginine']+data['Homoarginine'])/data['ADMA']
     data['Arg/Orn+Cit']=data['Arginine']/(data['Ornitine']+data['Citrulline'])
