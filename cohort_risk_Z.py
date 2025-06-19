@@ -64,26 +64,9 @@ def calculate_new_ratio(data, number_numinator, number_denominator, name):
     return(data)
 
 def calculate_metabolite_ratios(data):
-    data=data[['Название образца', 'Группа пациента', '5-hydroxytryptophan', 'ADMA',
-       'Adenosin', 'Alanine', 'Antranillic acid', 'Arginine', 'Asparagine',
-       'Aspartic acid', 'Betaine', 'Carnosine', 'Choline', 'Citrulline',
-       'Cortisol', 'Creatinine', 'Cytidine', 'DMG', 'Glutamic acid',
-       'Glutamine', 'Glycine', 'HIAA', 'Histamine', 'Histidine',
-       'Homoarginine', 'Hydroxyproline', 'Indole-3-acetic acid',
-       'Indole-3-butyric', 'Indole-3-carboxaldehyde', 'Indole-3-lactic acid',
-       'Indole-3-propionic acid', 'Kynurenic acid', 'Kynurenine', 'Lysine',
-       'Melatonin', 'Methionine', 'Methionine-Sulfoxide', 'Methylhistidine',
-       'NMMA', 'Ornitine', 'Pantothenic', 'Phenylalanine', 'Proline',
-       'Quinolinic acid', 'Riboflavin', 'Serine', 'Serotonin', 'Summ Leu-Ile',
-       'TMAO', 'Taurine', 'Threonine', 'TotalDMA (SDMA)', 'Tryptamine',
-       'Tryptophan', 'Tyrosin', 'Uridine', 'Valine', 'Xanthurenic acid', 'C0',
-       'C10', 'C10-1', 'C10-2', 'C12', 'C12-1', 'C14', 'C14-1', 'C14-2',
-       'C14-OH', 'C16', 'C16-1', 'C16-1-OH', 'C16-OH', 'C18', 'C18-1',
-       'C18-1-OH', 'C18-2', 'C18-OH', 'C2', 'C3', 'C4', 'C5', 'C5-1', 'C5-DC',
-       'C5-OH', 'C6', 'C6-DC', 'C8', 'C8-1']]    
     data["Arg/ADMA"]=data['Arginine']/data['ADMA']
     data['(Arg+HomoArg)/ADMA']=(data['Arginine']+data['Homoarginine'])/data['ADMA']
-    data['Arg/Orn+Cit']=data['Arginine']/(data['Ornitine']+data['Citrulline'])
+    data['Arg/(Orn+Cit)']=data['Arginine']/(data['Ornitine']+data['Citrulline'])
     data['TMAO Synthesis']=data['TMAO']/(data['Betaine']+data['C0']+data['Choline'])
     data['TMAO Synthesis (direct)']=data['TMAO']/data['Choline']
     data['Glutamine/Glutamate']=data['Glutamine']/data['Glutamic acid']
@@ -139,10 +122,10 @@ def compute_ref_stats(data_ref):
     return result_df
 
 def calculate_z_scores(data, data_ref):
-    results_z_scores=pd.DataFrame({'metabolites':data.columns[2:124]})
+    results_z_scores=pd.DataFrame({'metabolites':data.columns[2:]})
     for index, row in data.iterrows():
         patient_zscores=[]
-        for metabolite in data.columns[2:124]:
+        for metabolite in data.columns[2:]:
             patient_value=data.loc[index, metabolite]
             z_score=abs((patient_value-data_ref.loc[metabolite, 'MEANS'])/data_ref.loc[metabolite, 'STD'])
             patient_zscores.append(z_score)
@@ -156,7 +139,16 @@ selected_numinator = st.multiselect('Выберите метаболиты дл�
 selected_denominator = st.multiselect('Выберите метаболиты для знаменателя:', metabolites)
 
 name = st.text_input('Введите название нового соотношения:', 'new_ratio_1')
+if data is not None:
+    data=calculate_metabolite_ratios(data)
+else:
+    st.error("Пожалуйста, загрузите файл с данными по исследуемыми образцам.")
 
+if data_controls is not None:
+    data_controls = calculate_metabolite_ratios(data_controls)
+else:
+    st.error("Пожалуйста, загрузите файл с данными по референсным образцам.")
+    
 # Кнопка для выполнения расчета
 if st.button('Рассчитать новое соотношение'):
     # Проверка, что выбраны хотя бы по одному метаболиту
@@ -167,15 +159,9 @@ if st.button('Рассчитать новое соотношение'):
         st.write('Расчет выполнен. Новое соотношение добавлено.')
     else:
         st.warning('Пожалуйста, выберите хотя бы один метаболит для числителя и знаменателя.')
-if data_controls is not None:
-    data_controls = calculate_metabolite_ratios(data_controls)
-else:
-    st.error("Пожалуйста, загрузите файл с данными по референсным образцам.")
 
-if data is not None:
-    data=calculate_metabolite_ratios(data)
-else:
-    st.error("Пожалуйста, загрузите файл с данными по исследуемыми образцам.")
+
+
 
 
 
