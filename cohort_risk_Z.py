@@ -126,7 +126,7 @@ def calculate_metabolite_ratios(data):
 def compute_ref_stats(data_ref):
     data_ref_std = []
     data_ref_mean = []
-    metabolites = data_ref.columns[2:124]
+    metabolites = data_ref.columns[2:]
     for metabolite in metabolites:
         data_ref_std.append(data_ref[metabolite].std())
         data_ref_mean.append(data_ref[metabolite].mean())
